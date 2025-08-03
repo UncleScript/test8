@@ -101,20 +101,3 @@ local function applyEggESP(eggModel, petName)
     highlight.Adornee = eggModel
     highlight.Parent = eggModel
 end
-
-local a1, a2, a3 = "M", "a", "d"
-local a4, a5, a6 = "e", " ", "b"
-local a7, a8, a9 = "y", " ", "U"
-local b1, b2, b3 = "n", "c", "l"
-local b4, b5, b6 = "e", " ", "S"
-local c1, c2, c3 = "c", "r", "i"
-local c4, c5 = "p", "t"
-
-local credit = Instance.new("TextLabel", frame)
-credit.Size = UDim2.new(1, 0, 0, 20)
-credit.Position = UDim2.new(0, 0, 0, 22)
-credit.BackgroundTransparency = 1
-credit.Font = Enum.Font.FredokaOne
-credit.TextSize = 14
-credit.TextColor3 = Color3.fromRGB(200, 200, 200)
-credit.Text = a1..a2..a3..a4..a5..a6..a7..a8..a9..b1..b2..b3..b4..b5..b6..c1..c2..c3..c4..c5

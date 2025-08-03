@@ -1,0 +1,120 @@
+-- Visual pet hatch simulator with drag, ESP, auto random, pet age loader
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local mouse = player:GetMouse()
+local a1, a2, a3 = "M", "a", "d"
+
+local petTable = {
+    ["Common Egg"] = { "Dog", "Bunny", "Golden Lab" },
+    ["Uncommon Egg"] = { "Chicken", "Black Bunny", "Cat", "Deer" },
+    ["Rare Egg"] = { "Pig", "Monkey", "Rooster", "Orange Tabby", "Spotted Deer" },
+    ["Legendary Egg"] = { "Cow", "Polar Bear", "Sea Otter", "Turtle", "Silver Monkey" },
+    ["Mythical Egg"] = { "Grey Mouse", "Brown Mouse", "Squirrel", "Red Giant Ant" },
+    ["Bug Egg"] = { "Snail", "Caterpillar", "Giant Ant", "Praying Mantis" },
+    ["Night Egg"] = { "Frog", "Hedgehog", "Mole", "Echo Frog", "Night Owl", },
+    ["Bee Egg"] = { "Bee", "Honey Bee", "Bear Bee", "Petal Bee" },
+    ["Anti Bee Egg"] = { "Wasp", "Moth", "Tarantula Hawk" },
+    ["Oasis Egg"] = { "Meerkat", "Sand Snake", "Axolotl" },
+    ["Paradise Egg"] = { "Ostrich", "Peacock", "Capybara" },
+    ["Dinosaur Egg"] = { "Raptor", "Triceratops", "Stegosaurus" },
+    ["Primal Egg"] = { "Parasaurolophus", "Iguanodon", "Pachycephalosaurus" },
+    ["Zen Egg"] = { "Shiba Inu", "Nihonzaru", "Tanuki", "Tanchozuru", "Kappa", "Kitsune" },
+}
+
+local espEnabled = true
+local truePetMap = {}
+
+local function glitchLabelEffect(label)
+    coroutine.wrap(function()
+        local original = label.TextColor3
+        for i = 1, 2 do
+            label.TextColor3 = Color3.new(1, 0, 0)
+            wait(0.07)
+            label.TextColor3 = original
+            wait(0.07)
+        end
+    end)()
+end
+
+local function applyEggESP(eggModel, petName)
+    local existingLabel = eggModel:FindFirstChild("PetBillboard", true)
+    if existingLabel then existingLabel:Destroy() end
+    local existingHighlight = eggModel:FindFirstChild("ESPHighlight")
+    if existingHighlight then existingHighlight:Destroy() end
+    if not espEnabled then return end
+
+    local basePart
+    for _, desc in ipairs(eggModel:GetDescendants()) do
+        if desc:IsA("BasePart") then
+            basePart = desc
+            break
+        end
+    end
+    if not basePart then return end
+
+    local hatchReady = true
+    local hatchTime = eggModel:FindFirstChild("HatchTime")
+    local readyFlag = eggModel:FindFirstChild("ReadyToHatch")
+
+    if hatchTime and hatchTime:IsA("NumberValue") and hatchTime.Value > 0 then
+        hatchReady = false
+    elseif readyFlag and readyFlag:IsA("BoolValue") and not readyFlag.Value then
+        hatchReady = false
+    end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "PetBillboard"
+    billboard.Size = UDim2.new(0, 270, 0, 50)
+    billboard.StudsOffset = Vector3.new(0, 4.5, 0)
+    billboard.AlwaysOnTop = true
+    billboard.MaxDistance = 500
+    billboard.Parent = basePart
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.Text = eggModel.Name .. " | " .. petName
+    if not hatchReady then
+        label.Text = eggModel.Name .. " | " .. petName .. " (Not Ready)"
+        label.TextColor3 = Color3.fromRGB(200, 50, 255)
+        label.TextStrokeTransparency = 0.5
+    else
+        label.TextColor3 = Color3.new(1, 1, 1)
+        label.TextStrokeTransparency = 0
+    end
+    label.TextScaled = true
+    label.Font = Enum.Font.FredokaOne
+    label.Parent = billboard
+
+    glitchLabelEffect(label)
+
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "ESPHighlight"
+    highlight.FillColor = Color3.fromRGB(255, 200, 0)
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    highlight.FillTransparency = 0.7
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Adornee = eggModel
+    highlight.Parent = eggModel
+end
+
+local a1, a2, a3 = "M", "a", "d"
+local a4, a5, a6 = "e", " ", "b"
+local a7, a8, a9 = "y", " ", "U"
+local b1, b2, b3 = "n", "c", "l"
+local b4, b5, b6 = "e", " ", "S"
+local c1, c2, c3 = "c", "r", "i"
+local c4, c5 = "p", "t"
+
+local credit = Instance.new("TextLabel", frame)
+credit.Size = UDim2.new(1, 0, 0, 20)
+credit.Position = UDim2.new(0, 0, 0, 22)
+credit.BackgroundTransparency = 1
+credit.Font = Enum.Font.FredokaOne
+credit.TextSize = 14
+credit.TextColor3 = Color3.fromRGB(200, 200, 200)
+credit.Text = a1..a2..a3..a4..a5..a6..a7..a8..a9..b1..b2..b3..b4..b5..b6..c1..c2..c3..c4..c5
